@@ -870,7 +870,7 @@ void loop() {
             if (captivePortal) dnsServer.processNextRequest();
         }
         // If there is no any user activity we are restarting to try to connect WiFi again
-        if (!streamsServed && !imagesServed && !indexVisited && !streamCount && millis() - accesspoint_start > 20 * WIFI_WATCHDOG) {
+        if (!streamsServed && !imagesServed && !indexVisited && !streamCount && millis() - accesspoint_start > 120000) {
           Serial.println("Restarting due to AP inactivity...");
           ESP.restart();
         }
