@@ -481,6 +481,13 @@ void WifiSetup() {
         // We have a list to scan
         Serial.printf("Scanning local Wifi Networks\r\n");
         int stationsFound = WiFi.scanNetworks();
+        // first minute after reset we are looking for WiFi stations 
+        // on case if router restarted after power failure
+        while (!stationsFound && millis() < 60000) {
+          delay(500);
+          Serial.print(".");
+          stationsFound = WiFi.scanNetworks();
+        }
         Serial.printf("%i networks found\r\n", stationsFound);
         if (stationsFound > 0) {
             for (int i = 0; i < stationsFound; ++i) {
@@ -873,9 +880,9 @@ void loop() {
             if (captivePortal) dnsServer.processNextRequest();
         }
         // If there is no any user activity we are restarting to try to connect WiFi again
-        if (!streamsServed && !imagesServed && !indexVisited && !streamCount && millis() - accesspoint_start > 20 * WIFI_WATCHDOG) {
+        if (!streamsServed && !imagesServed && !indexVisited && !streamCount && millis() - accesspoint_start > 90000) {
           Serial.println("Restarting due to AP inactivity...");
-          ESP.restart();
+          need_restart = true;
         }
     } else {
         // client mode can fail; so reconnect as appropriate
