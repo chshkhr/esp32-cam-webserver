@@ -904,6 +904,7 @@ void loop() {
             }
         } else {
             // disconnected; attempt to reconnect
+            /*
             if (!warned) {
                 // Tell the user if we just disconnected
                 WiFi.disconnect();  // ensures disconnect is complete, wifi scan cleared
@@ -911,6 +912,9 @@ void loop() {
                 warned = true;
             }
             WifiSetup();
+            */
+            Serial.println("Restart to reconnect...");
+            need_restart = true;
         }
     }
 }
