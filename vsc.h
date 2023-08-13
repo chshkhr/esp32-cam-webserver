@@ -1,5 +1,5 @@
 struct camera_data { const byte ip3; const char token[22]; };
-const int camera_data_size = 7;
+const int camera_data_size = 9;
 const struct camera_data camera_datas[camera_data_size] = 
   {
     { 203, "zUVAsF4JyKDqLOkUblYy" }, 
@@ -8,5 +8,7 @@ const struct camera_data camera_datas[camera_data_size] =
     { 208, "E8M9ZnTEHPjOMMmNPQhi" },
     { 209, "PNDPvObFtTvU9VXkjcxq" },
     { 210, "1HLa18M0P49cJrZRJmsK" },
-    { 211, "RVkVNPxlLZDIQx9UftnY" }    
+    { 211, "RVkVNPxlLZDIQx9UftnY" },
+    { 212, "Cp9N0Wwj4bXeGCXVIxbc" },
+    { 213, "uW35ssbqrZwlNH1bP6FE" }    
   };

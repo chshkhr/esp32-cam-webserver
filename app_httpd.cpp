@@ -426,6 +426,18 @@ static esp_err_t cmd_handler(httpd_req_t *req){
             setLamp(lampVal);
         }
     }
+    else if(!strcmp(variable, "flash") && (lampVal != -1)) {
+        if (val == 1)
+          lampVal = 30;
+        else
+          lampVal = 0;
+        if (autoLamp) {
+           if (streamCount > 0) setLamp(lampVal);
+           else setLamp(0);
+        } else {
+            setLamp(lampVal);
+        }
+    }
     else if(!strcmp(variable, "save_prefs")) {
         if (filesystem) savePrefs(SPIFFS);
     }
@@ -907,6 +919,12 @@ void startCameraServer(int hPort, int sPort){
         .handler   = streamviewer_handler,
         .user_ctx  = NULL
     };
+    httpd_uri_t streamviewer2_uri = {
+        .uri       = "/stream",
+        .method    = HTTP_GET,
+        .handler   = stream_handler,
+        .user_ctx  = NULL
+    };
     httpd_uri_t info_uri = {
         .uri       = "/info",
         .method    = HTTP_GET,
@@ -921,6 +939,12 @@ void startCameraServer(int hPort, int sPort){
     };
     httpd_uri_t viewerror_uri = {
         .uri       = "/view",
+        .method    = HTTP_GET,
+        .handler   = error_handler,
+        .user_ctx  = NULL
+    };
+    httpd_uri_t view2error_uri = {
+        .uri       = "/stream",
         .method    = HTTP_GET,
         .handler   = error_handler,
         .user_ctx  = NULL
@@ -955,10 +979,12 @@ void startCameraServer(int hPort, int sPort){
         if (critERR.length() > 0) {
             httpd_register_uri_handler(camera_httpd, &error_uri);
             httpd_register_uri_handler(camera_httpd, &viewerror_uri);
+            httpd_register_uri_handler(camera_httpd, &view2error_uri);
         } else {
             httpd_register_uri_handler(stream_httpd, &stream_uri);
             httpd_register_uri_handler(stream_httpd, &info_uri);
             httpd_register_uri_handler(stream_httpd, &streamviewer_uri);
+            httpd_register_uri_handler(stream_httpd, &streamviewer2_uri);
         }
         httpd_register_uri_handler(stream_httpd, &favicon_16x16_uri);
         httpd_register_uri_handler(stream_httpd, &favicon_32x32_uri);
